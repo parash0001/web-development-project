@@ -1,41 +1,21 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const Categories = {
-  APPETIZER: "APPETIZER",
-  MAIN_COURSE: "MAIN_COURSE",
-  DESSERT: "DESSERT",
-  BEVERAGE: "BEVERAGE",
-  SNACK: "SNACK",
-  SALAD: "SALAD",
-  SOUP: "SOUP",
-  SIDE_DISH: "SIDE_DISH",
-  BREAKFAST: "BREAKFAST",
-  LUNCH: "LUNCH",
-  DINNER: "DINNER",
-  SPECIAL: "SPECIAL",
-};
-
-const Types = {
-  VEGETARIAN: "VEGETARIAN",
-  NON_VEGETARIAN: "NON_VEGETARIAN",
-  VEGAN: "VEGAN",
-};
 
 const AddOrderForm = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [formData, setFormData] = useState({
     items: [{ menuItem: "", price: 0, quantity: 1 }],
-    status: "",
+    status: "Received",
     deliveryType: "",
-    room: "",
-    table: "",
+    roomId: "",
+    tableId: "",
     address: "",
     email: "",
     phone: "",
+    customerId: "12345", // assuming you have customer ID available somehow
   });
 
   const fetchMenuItems = async () => {
@@ -45,11 +25,11 @@ const AddOrderForm = () => {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
       });
-      console.log("Fetched Menu Items:", response.data);
-      if (Array.isArray(response.data)) {
-        setMenuItems(response.data);
+      console.log("Fetched Menu Items:", response.data.data);
+      if (Array.isArray(response.data.data)) {
+        setMenuItems(response.data.data);
       } else {
-        console.error("Invalid response structure:", response.data);
+        console.error("Invalid response structure:", response.data.data);
         toast.error("Failed to fetch menu items. Please try again later.");
       }
     } catch (error) {
@@ -63,7 +43,9 @@ const AddOrderForm = () => {
   }, []);
 
   const handleMenuItemChange = (index, menuItemId) => {
-    const selectedMenuItem = menuItems.find(menuItem => menuItem.id === parseInt(menuItemId));
+    const selectedMenuItem = menuItems.find(
+      (menuItem) => menuItem.id === parseInt(menuItemId)
+    );
     if (selectedMenuItem) {
       const updatedItems = [...formData.items];
       updatedItems[index] = {
@@ -84,18 +66,17 @@ const AddOrderForm = () => {
   const handleAddItem = () => {
     setFormData({
       ...formData,
-      items: [
-        ...formData.items,
-        { menuItem: "", price: 0, quantity: 1 }
-      ],
+      items: [...formData.items, { menuItem: "", price: 0, quantity: 1 }],
     });
     calculateTotalPrice();
   };
 
   const calculateTotalPrice = () => {
     let totalPrice = 0;
-    formData.items.forEach(item => {
-      const menuItem = menuItems.find(menuItem => menuItem.id === item.menuItem);
+    formData.items.forEach((item) => {
+      const menuItem = menuItems.find(
+        (menuItem) => menuItem.id === item.menuItem
+      );
       if (menuItem) {
         totalPrice += menuItem.price * item.quantity;
       }
@@ -106,9 +87,9 @@ const AddOrderForm = () => {
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
 
-    if (name.startsWith('quantity')) {
+    if (name.startsWith("quantity")) {
       const updatedItems = [...formData.items];
-      const itemIndex = parseInt(name.split('-')[1], 10);
+      const itemIndex = parseInt(name.split("-")[1], 10);
       updatedItems[itemIndex] = {
         ...updatedItems[itemIndex],
         quantity: parseInt(value, 10),
@@ -136,23 +117,20 @@ const AddOrderForm = () => {
       }
 
       const orderData = {
-        items: formData.items.map(item => {
-          const menuItem = menuItems.find(menuItem => menuItem.id === item.menuItem);
-          return {
-            menuItem: item.menuItem,
-            name: menuItem ? menuItem.name : "",
-            price: item.price,
-            quantity: item.quantity,
-            category: menuItem ? menuItem.category : null,
-          };
-        }),
-        status: formData.status || "",
-        deliveryType: formData.deliveryType || "",
-        room: formData.deliveryType === "RoomService" ? formData.room : "",
-        table: formData.deliveryType === "Hotel" ? formData.table : "",
-        address: formData.deliveryType === "HomeDelivery" ? formData.address || "" : "",
-        email: formData.deliveryType === "HomeDelivery" ? formData.email || "" : "",
-        phone: formData.deliveryType === "HomeDelivery" ? formData.phone || "" : "",
+        customerId: formData.customerId,
+        items: formData.items.map((item) => ({
+          menuItem: item.menuItem,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        status: formData.status,
+        deliveryType: formData.deliveryType,
+        roomId: formData.deliveryType === "RoomService" ? formData.roomId : "",
+        tableId: formData.deliveryType === "Hotel" ? formData.tableId : "",
+        address:
+          formData.deliveryType === "HomeDelivery" ? formData.address : "",
+        email: formData.deliveryType === "HomeDelivery" ? formData.email : "",
+        phone: formData.deliveryType === "HomeDelivery" ? formData.phone : "",
         totalPrice: totalPrice,
       };
 
@@ -191,13 +169,14 @@ const AddOrderForm = () => {
   const reset = () => {
     setFormData({
       items: [{ menuItem: "", price: 0, quantity: 1 }],
-      status: "",
+      status: "Received",
       deliveryType: "",
-      room: "",
-      table: "",
+      roomId: "",
+      tableId: "",
       address: "",
       email: "",
       phone: "",
+      customerId: "12345", // reset to a valid customer ID
     });
     setTotalPrice(0);
   };
@@ -220,7 +199,10 @@ const AddOrderForm = () => {
         {formData.items.map((item, index) => (
           <div key={index} className="flex items-center gap-4 mb-4">
             <div>
-              <label htmlFor={`menuItem-${index}`} className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor={`menuItem-${index}`}
+                className="block text-sm font-medium text-gray-700"
+              >
                 Menu Item
               </label>
               <select
@@ -239,7 +221,10 @@ const AddOrderForm = () => {
               </select>
             </div>
             <div>
-              <label htmlFor={`price-${index}`} className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor={`price-${index}`}
+                className="block text-sm font-medium text-gray-700"
+              >
                 Price
               </label>
               <input
@@ -252,7 +237,10 @@ const AddOrderForm = () => {
               />
             </div>
             <div>
-              <label htmlFor={`quantity-${index}`} className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor={`quantity-${index}`}
+                className="block text-sm font-medium text-gray-700"
+              >
                 Quantity
               </label>
               <input
@@ -278,29 +266,22 @@ const AddOrderForm = () => {
         <button
           type="button"
           onClick={handleAddItem}
-          className="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Add Item
         </button>
-        <h2 className="text-xl font-semibold mb-4">Order Details</h2>
         <div className="mb-4">
-          <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
-          <input
-            type="text"
-            id="status"
-            name="status"
-            value={formData.status}
-            onChange={handleInputChange}
-            className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="deliveryType" className="block text-sm font-medium text-gray-700">Delivery Type</label>
+          <label
+            htmlFor="deliveryType"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Delivery Type
+          </label>
           <select
             name="deliveryType"
             id="deliveryType"
             value={formData.deliveryType}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange(e)}
             className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
             <option value="">Select Delivery Type</option>
@@ -311,12 +292,17 @@ const AddOrderForm = () => {
         </div>
         {formData.deliveryType === "RoomService" && (
           <div className="mb-4">
-            <label htmlFor="room" className="block text-sm font-medium text-gray-700">Room</label>
+            <label
+              htmlFor="roomId"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Room ID
+            </label>
             <input
               type="text"
-              id="room"
-              name="room"
-              value={formData.room}
+              id="roomId"
+              name="roomId"
+              value={formData.roomId}
               onChange={handleInputChange}
               className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -324,12 +310,17 @@ const AddOrderForm = () => {
         )}
         {formData.deliveryType === "Hotel" && (
           <div className="mb-4">
-            <label htmlFor="table" className="block text-sm font-medium text-gray-700">Table</label>
+            <label
+              htmlFor="tableId"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Table ID
+            </label>
             <input
               type="text"
-              id="table"
-              name="table"
-              value={formData.table}
+              id="tableId"
+              name="tableId"
+              value={formData.tableId}
               onChange={handleInputChange}
               className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -338,7 +329,12 @@ const AddOrderForm = () => {
         {formData.deliveryType === "HomeDelivery" && (
           <>
             <div className="mb-4">
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Address
+              </label>
               <input
                 type="text"
                 id="address"
@@ -349,7 +345,12 @@ const AddOrderForm = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
@@ -360,7 +361,12 @@ const AddOrderForm = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Phone
+              </label>
               <input
                 type="tel"
                 id="phone"
@@ -373,7 +379,12 @@ const AddOrderForm = () => {
           </>
         )}
         <div className="mb-4">
-          <label htmlFor="totalPrice" className="block text-sm font-medium text-gray-700">Total Price</label>
+          <label
+            htmlFor="totalPrice"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Total Price
+          </label>
           <input
             type="number"
             id="totalPrice"
@@ -383,11 +394,27 @@ const AddOrderForm = () => {
             className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
+        <div className="mb-4">
+          <label
+            htmlFor="status"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Status
+          </label>
+          <input
+            type="text"
+            id="status"
+            name="status"
+            value={formData.status}
+            readOnly
+            className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
         <button
           type="submit"
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Submit Order
+          Submit
         </button>
       </form>
       <ToastContainer />

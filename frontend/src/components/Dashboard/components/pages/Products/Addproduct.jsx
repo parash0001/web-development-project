@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import axios from "axios";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "tailwindcss/tailwind.css";
+import * as yup from "yup";
 
 // Define the validation schema
 const kitchenSchema = yup.object().shape({
@@ -63,11 +63,15 @@ const AddFood = () => {
         image: "null",
       };
 
-      const response = await axios.post("http://localhost:8080/api/menu/add", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/menu/add",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast.success("Food added successfully!", {
         autoClose: 1000,
@@ -91,7 +95,10 @@ const AddFood = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-1">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Menu Item Name
             </label>
             <input
@@ -100,11 +107,18 @@ const AddFood = () => {
               id="name"
               className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
-            {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
+            {errors.name && (
+              <span className="text-red-500 text-sm">
+                {errors.name.message}
+              </span>
+            )}
           </div>
 
           <div className="mb-1">
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700"
+            >
               Category
             </label>
             <select
@@ -126,11 +140,18 @@ const AddFood = () => {
               <option value="DINNER">Dinner</option>
               <option value="SPECIAL">Special</option>
             </select>
-            {errors.category && <span className="text-red-500 text-sm">{errors.category.message}</span>}
+            {errors.category && (
+              <span className="text-red-500 text-sm">
+                {errors.category.message}
+              </span>
+            )}
           </div>
 
           <div className="mb-1">
-            <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="type"
+              className="block text-sm font-medium text-gray-700"
+            >
               Type
             </label>
             <select
@@ -143,11 +164,18 @@ const AddFood = () => {
               <option value="NON_VEGETARIAN">Non-Vegetarian</option>
               <option value="VEGAN">Vegan</option>
             </select>
-            {errors.type && <span className="text-red-500 text-sm">{errors.type.message}</span>}
+            {errors.type && (
+              <span className="text-red-500 text-sm">
+                {errors.type.message}
+              </span>
+            )}
           </div>
 
           <div className="mb-1">
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="price"
+              className="block text-sm font-medium text-gray-700"
+            >
               Price
             </label>
             <input
@@ -156,7 +184,11 @@ const AddFood = () => {
               id="price"
               className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
-            {errors.price && <span className="text-red-500 text-sm">{errors.price.message}</span>}
+            {errors.price && (
+              <span className="text-red-500 text-sm">
+                {errors.price.message}
+              </span>
+            )}
           </div>
         </div>
 

@@ -118,41 +118,49 @@ const AddRoomForm = () => {
 
           <div className="mb-4">
             <label
-              htmlFor="type"
-              className="block text-sm font-medium text-gray-700"
+                htmlFor="type"
+                className="block text-sm font-medium text-gray-700"
             >
               Room Type
             </label>
             <select
-              {...register("type")}
-              id="type"
-              name="type"
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                {...register("type")}
+                id="type"
+                name="type"
+                className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value="">Select Room Type</option>
-              <option value="THREE_SINGLE_BED_ROOM_AC">3 Single bed room AC</option>
+              <option value="DELUX_ROOM">Deluxe Room</option>
+              <option value="AC_ROOM">AC Room</option>
+              <option value="FOUR_BED_AC_ROOM">4 Bed AC Room</option>
+              <option value="FOUR_BED_NON_AC_ROOM">4 Bed Non-AC Room</option>
+              <option value="THREE_DOUBLE_BED_ROOM">3 Double Bed Room</option>
+              <option value="TWO_DOUBLE_BED_ROOM">2 Double Bed Room</option>
+              <option value="ONE_DOUBLE_ONE_SINGLE_BED_ROOM">1 Double, 1 Single Bed Room</option>
+              <option value="ONE_MEDIUM_BED_ROOM">1 Medium Bed Room</option>
+              <option value="THREE_SINGLE_BED_ROOM_AC">3 Single Bed Room AC</option>
             </select>
             {errors.type && (
-              <span className="text-red-500 text-sm">{errors.type.message}</span>
+                <span className="text-red-500 text-sm">{errors.type.message}</span>
             )}
           </div>
 
           <div className="mb-4">
             <label
-              htmlFor="checkInDate"
-              className="block text-sm font-medium text-gray-700"
+                htmlFor="checkInDate"
+                className="block text-sm font-medium text-gray-700"
             >
               Check-in Date
             </label>
             <input
-              {...register("checkInDate")}
-              type="date"
-              id="checkInDate"
-              name="checkInDate"
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                {...register("checkInDate")}
+                type="date"
+                id="checkInDate"
+                name="checkInDate"
+                className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
             {errors.checkInDate && (
-              <span className="text-red-500 text-sm">
+                <span className="text-red-500 text-sm">
                 {errors.checkInDate.message}
               </span>
             )}
@@ -160,8 +168,8 @@ const AddRoomForm = () => {
 
           <div className="mb-4">
             <label
-              htmlFor="checkOutDate"
-              className="block text-sm font-medium text-gray-700"
+                htmlFor="checkOutDate"
+                className="block text-sm font-medium text-gray-700"
             >
               Check-out Date
             </label>

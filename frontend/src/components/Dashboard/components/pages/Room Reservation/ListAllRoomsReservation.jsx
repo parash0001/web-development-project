@@ -177,9 +177,16 @@ const RoomList = () => {
           className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         >
           <option value="">All Types</option>
-          {/* Update room types as needed */}
-          <option value="THREE_SINGLE_BED_ROOM_AC">Three Single Bed AC Room</option>
-          {/* Add other types if applicable */}
+
+          <option value="DELUX_ROOM">Deluxe Room</option>
+          <option value="AC_ROOM">AC Room</option>
+          <option value="FOUR_BED_AC_ROOM">4 Bed AC Room</option>
+          <option value="FOUR_BED_NON_AC_ROOM">4 Bed Non-AC Room</option>
+          <option value="THREE_DOUBLE_BED_ROOM">3 Double Bed Room</option>
+          <option value="TWO_DOUBLE_BED_ROOM">2 Double Bed Room</option>
+          <option value="ONE_DOUBLE_ONE_SINGLE_BED_ROOM">1 Double, 1 Single Bed Room</option>
+          <option value="ONE_MEDIUM_BED_ROOM">1 Medium Bed Room</option>
+          <option value="THREE_SINGLE_BED_ROOM_AC">3 Single Bed Room AC</option>
         </select>
       </div>
 
@@ -321,8 +328,16 @@ const RoomList = () => {
                 }
                 className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               >
-                <option value="THREE_SINGLE_BED_ROOM_AC">Three Single Bed AC Room</option>
-                {/* Add other types if applicable */}
+
+                <option value="DELUX_ROOM">Deluxe Room</option>
+                <option value="AC_ROOM">AC Room</option>
+                <option value="FOUR_BED_AC_ROOM">4 Bed AC Room</option>
+                <option value="FOUR_BED_NON_AC_ROOM">4 Bed Non-AC Room</option>
+                <option value="THREE_DOUBLE_BED_ROOM">3 Double Bed Room</option>
+                <option value="TWO_DOUBLE_BED_ROOM">2 Double Bed Room</option>
+                <option value="ONE_DOUBLE_ONE_SINGLE_BED_ROOM">1 Double, 1 Single Bed Room</option>
+                <option value="ONE_MEDIUM_BED_ROOM">1 Medium Bed Room</option>
+                <option value="THREE_SINGLE_BED_ROOM_AC">3 Single Bed Room AC</option>
               </select>
             </div>
             <div className="mb-4">
